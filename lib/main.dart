@@ -1,7 +1,8 @@
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'live_camera.dart';
+import 'package:dds/map.dart';
+
 List<CameraDescription> cameras;
 
 Future<void> main() async {
@@ -9,14 +10,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
   // running the app
-  runApp(
-      MaterialApp(
-        home: MyApp(),
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
-      )
-  );
+  runApp(MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData.dark(),
+  ));
 }
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
         title: Text("Object Detector App"),
       ),
       body: Container(
-        child:Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -38,10 +38,26 @@ class _MyAppState extends State<MyApp> {
                 minWidth: 160,
                 child: ElevatedButton(
                   child: Text("Real Time Detection"),
-                  onPressed:() {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => LiveFeed(cameras),
-                    ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LiveFeed(cameras),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              ButtonTheme(
+                minWidth: 160,
+                child: ElevatedButton(
+                  child: Text("G MAP"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GMap(),
+                      ),
                     );
                   },
                 ),
@@ -52,5 +68,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
 }
