@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 typedef void Callback(List<dynamic> list, int h, int w);
 var result = "";
+
 class CameraFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Callback setRecognitions;
@@ -30,8 +31,8 @@ class _CameraFeedState extends State<CameraFeed> {
     } else {
       controller = new CameraController(
         widget.cameras[1],
-        ResolutionPreset.max,
-        enableAudio: false
+        ResolutionPreset.ultraHigh,
+        enableAudio: false,
       );
       controller.initialize().then((_) {
         if (!mounted) {
@@ -43,19 +44,19 @@ class _CameraFeedState extends State<CameraFeed> {
           if (!isDetecting) {
             isDetecting = true;
             Tflite.runModelOnFrame(
-                bytesList: img.planes.map((plane) {
-                  return plane.bytes;
-                }).toList(),
-                // model: "SSDMobileNet",
-                imageHeight: img.height,
-                imageWidth: img.width,
-                imageMean: 127.5,
-                imageStd: 127.5,
-                rotation: 90,
-                numResults: 2,
-                threshold: 0.4,
-                asynch: true
-            ).then((recognitions) {
+                    bytesList: img.planes.map((plane) {
+                      return plane.bytes;
+                    }).toList(),
+                    // model: "SSDMobileNet",
+                    imageHeight: img.height,
+                    imageWidth: img.width,
+                    imageMean: 127.5,
+                    imageStd: 127.5,
+                    rotation: 90,
+                    numResults: 2,
+                    threshold: 0.4,
+                    asynch: true)
+                .then((recognitions) {
               /*
               When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
                */
@@ -84,9 +85,7 @@ class _CameraFeedState extends State<CameraFeed> {
       return Container();
     }
 
-    var tmp = MediaQuery
-        .of(context)
-        .size;
+    var tmp = MediaQuery.of(context).size;
     var screenH = math.max(tmp.height, tmp.width);
     var screenW = math.min(tmp.height, tmp.width);
     tmp = controller.value.previewSize;
@@ -97,9 +96,9 @@ class _CameraFeedState extends State<CameraFeed> {
 
     return OverflowBox(
       maxHeight:
-      screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
+          screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
       maxWidth:
-      screenRatio > previewRatio ? screenH / previewH * previewW : screenW,
+          screenRatio > previewRatio ? screenH / previewH * previewW : screenW,
       child: CameraPreview(controller),
     );
   }
