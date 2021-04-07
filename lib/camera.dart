@@ -30,7 +30,7 @@ class _CameraFeedState extends State<CameraFeed> {
     } else {
       controller = new CameraController(
         widget.cameras[1],
-        ResolutionPreset.max,
+        ResolutionPreset.ultraHigh,
         enableAudio: false
       );
       controller.initialize().then((_) {
@@ -51,9 +51,8 @@ class _CameraFeedState extends State<CameraFeed> {
                 imageWidth: img.width,
                 imageMean: 127.5,
                 imageStd: 127.5,
-                rotation: 90,
                 numResults: 2,
-                threshold: 0.4,
+                threshold: 0.2,
                 asynch: true
             ).then((recognitions) {
               /*
