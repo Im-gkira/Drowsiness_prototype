@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
+import 'package:dds/response.dart';
+import 'package:provider/provider.dart';
 
 typedef void Callback(List<dynamic> list, int h, int w);
-var result = "";
+var result;
+
 class CameraFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Callback setRecognitions;
+  final double aspectRatio;
 
   // The cameraFeed Class takes the cameras list and the setRecognitions
   // function as argument
-  CameraFeed(this.cameras, this.setRecognitions);
+  CameraFeed(this.cameras, this.setRecognitions, this.aspectRatio);
 
   @override
   _CameraFeedState createState() => new _CameraFeedState();
@@ -30,8 +34,8 @@ class _CameraFeedState extends State<CameraFeed> {
     } else {
       controller = new CameraController(
         widget.cameras[1],
-        ResolutionPreset.max,
-        enableAudio: false
+        ResolutionPreset.ultraHigh,
+        enableAudio: false,
       );
       controller.initialize().then((_) {
         if (!mounted) {
@@ -43,25 +47,27 @@ class _CameraFeedState extends State<CameraFeed> {
           if (!isDetecting) {
             isDetecting = true;
             Tflite.runModelOnFrame(
-                bytesList: img.planes.map((plane) {
-                  return plane.bytes;
-                }).toList(),
-                // model: "SSDMobileNet",
-                imageHeight: img.height,
-                imageWidth: img.width,
-                imageMean: 127.5,
-                imageStd: 127.5,
-                rotation: 90,
-                numResults: 2,
-                threshold: 0.4,
-                asynch: true
-            ).then((recognitions) {
+                    bytesList: img.planes.map((plane) {
+                      return plane.bytes;
+                    }).toList(),
+                    // model: "SSDMobileNet",
+                    imageHeight: img.height,
+                    imageWidth: img.width,
+                    imageMean: 127.5,
+                    imageStd: 127.5,
+                    rotation: 90,
+                    numResults: 2,
+                    threshold: 0.4,
+                    asynch: true)
+                .then((recognitions) {
               /*
               When setRecognitions is called here, the parameters are being passed on to the parent widget as callback. i.e. to the LiveFeed class
                */
               recognitions.forEach((response) {
                 print(response["label"]);
                 result = response["label"];
+                Provider.of<CameraData>(context, listen: false)
+                    .changeString(result);
               });
               widget.setRecognitions(recognitions, img.height, img.width);
               isDetecting = false;
@@ -74,7 +80,7 @@ class _CameraFeedState extends State<CameraFeed> {
 
   @override
   void dispose() {
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -84,23 +90,25 @@ class _CameraFeedState extends State<CameraFeed> {
       return Container();
     }
 
-    var tmp = MediaQuery
-        .of(context)
-        .size;
-    var screenH = math.max(tmp.height, tmp.width);
-    var screenW = math.min(tmp.height, tmp.width);
+    var tmp = MediaQuery.of(context).size;
+    var screenH = (math.max(tmp.height, tmp.width)) / widget.aspectRatio;
+    var screenW = (math.min(tmp.height, tmp.width)) / widget.aspectRatio;
     tmp = controller.value.previewSize;
     var previewH = math.max(tmp.height, tmp.width);
     var previewW = math.min(tmp.height, tmp.width);
     var screenRatio = screenH / screenW;
     var previewRatio = previewH / previewW;
 
-    return OverflowBox(
-      maxHeight:
-      screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
-      maxWidth:
-      screenRatio > previewRatio ? screenH / previewH * previewW : screenW,
-      child: CameraPreview(controller),
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      height:
+          screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
+      width:
+          screenRatio > previewRatio ? screenH / previewH * previewW : screenW,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: CameraPreview(controller),
+      ),
     );
   }
 }
