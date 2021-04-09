@@ -45,6 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+              ButtonTheme(
+                minWidth: 160,
+                child: ElevatedButton(
+                  child: Text("Settings (TO BE IMPLEMENTED)"),
+                  onPressed: () {},
+                ),
+              ),
             ],
           ),
         ),
