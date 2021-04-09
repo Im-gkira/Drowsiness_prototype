@@ -1,9 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'bounding_box.dart';
-import 'camera.dart';
-import 'dart:math' as math;
+import 'package:dds/detector/camera.dart';
 import 'package:tflite/tflite.dart';
+import 'package:provider/provider.dart';
+import 'package:dds/response.dart';
+// import 'package:dds/detector/bounding_box.dart';
+// import 'dart:math' as math;
 
 class LiveFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -47,14 +49,11 @@ class _LiveFeedState extends State<LiveFeed> {
 
   @override
   Widget build(BuildContext context) {
-    Size screen = MediaQuery.of(context).size;
+    // Size screen = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(result),
-      ),
       body: Stack(
         children: <Widget>[
-          CameraFeed(widget.cameras, setRecognitions),
+          CameraFeed(widget.cameras, setRecognitions, 1.0),
           // BoundingBox(
           //   _recognitions == null ? [23,23] : _recognitions,
           //   math.max(_imageHeight, _imageWidth),
@@ -63,6 +62,13 @@ class _LiveFeedState extends State<LiveFeed> {
           //   screen.width,
           // ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Provider.of<CameraData>(context, listen: true).icon),
+        backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

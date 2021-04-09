@@ -6,10 +6,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flexible_polyline/flexible_polyline.dart';
 import 'package:flexible_polyline/latlngz.dart';
-import 'package:dds/map_components.dart';
-import 'package:dds/search.dart';
+import 'package:dds/map/map_components.dart';
+import 'package:dds/map/search.dart';
+import 'package:camera/camera.dart';
+import 'package:dds/detector/camera.dart';
+import 'package:tflite/tflite.dart';
+import 'package:provider/provider.dart';
+import 'package:dds/response.dart';
 
 class GMap extends StatefulWidget {
+  final List<CameraDescription> cameras;
+  GMap(this.cameras);
+
   @override
   _GMapState createState() => _GMapState();
 }
@@ -28,10 +36,36 @@ class _GMapState extends State<GMap> {
   int i = 1;
   StreamSubscription<Position> _positionStream;
   List<Widget> navigationList = [];
+  var ratio;
+
+  List<dynamic> _recognitions;
+  int _imageHeight = 0;
+  int _imageWidth = 0;
+
+  initCameras() async {}
+
+  loadTfModel() async {
+    await Tflite.loadModel(
+      model: "assets/eyes_float.tflite",
+      labels: "assets/labels.txt",
+    );
+  }
+
+  /*
+  The set recognitions function assigns the values of recognitions, imageHeight and width to the variables defined here as callback
+  */
+  setRecognitions(recognitions, imageHeight, imageWidth) {
+    setState(() {
+      _recognitions = recognitions;
+      _imageHeight = imageHeight;
+      _imageWidth = imageWidth;
+    });
+  }
 
   @override
   void initState() {
     getLocation();
+    loadTfModel();
     super.initState();
   }
 
@@ -64,6 +98,7 @@ class _GMapState extends State<GMap> {
       _center = LatLng(_currentLocation.latitude, _currentLocation.longitude);
       //placeMarkers(_center, '_center');
     });
+
     _controller.animateCamera(CameraUpdate.newLatLng(_center));
   }
 
@@ -169,9 +204,9 @@ class _GMapState extends State<GMap> {
         _currentLocation = position;
       }
       setState(() {
-        markerList.clear();
+        // markerList.clear();
         _center = LatLng(_currentLocation.latitude, _currentLocation.longitude);
-        startandEndMarkers(data);
+        // startandEndMarkers(data);
         //placeMarkers(_center, '_center');
         _controller.animateCamera(CameraUpdate.newLatLng(_center));
         navigationList.clear();
@@ -223,7 +258,7 @@ class _GMapState extends State<GMap> {
               _controller = controller;
             },
             mapType: MapType.normal,
-            // myLocationButtonEnabled: true,
+            myLocationButtonEnabled: false,
             myLocationEnabled: true,
             zoomControlsEnabled: false,
             markers: markerList,
@@ -316,7 +351,17 @@ class _GMapState extends State<GMap> {
               )
             ],
           ),
+          Container(
+            child: CameraFeed(widget.cameras, setRecognitions, 3.0),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Provider.of<CameraData>(context, listen: true).icon),
+        backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
+import 'package:dds/response.dart';
+import 'package:provider/provider.dart';
 
 typedef void Callback(List<dynamic> list, int h, int w);
-var result = "";
+var result;
 
 class CameraFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Callback setRecognitions;
+  final double aspectRatio;
 
   // The cameraFeed Class takes the cameras list and the setRecognitions
   // function as argument
-  CameraFeed(this.cameras, this.setRecognitions);
+  CameraFeed(this.cameras, this.setRecognitions, this.aspectRatio);
 
   @override
   _CameraFeedState createState() => new _CameraFeedState();
@@ -63,6 +66,8 @@ class _CameraFeedState extends State<CameraFeed> {
               recognitions.forEach((response) {
                 print(response["label"]);
                 result = response["label"];
+                Provider.of<CameraData>(context, listen: false)
+                    .changeString(result);
               });
               widget.setRecognitions(recognitions, img.height, img.width);
               isDetecting = false;
@@ -75,7 +80,7 @@ class _CameraFeedState extends State<CameraFeed> {
 
   @override
   void dispose() {
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -86,20 +91,24 @@ class _CameraFeedState extends State<CameraFeed> {
     }
 
     var tmp = MediaQuery.of(context).size;
-    var screenH = math.max(tmp.height, tmp.width);
-    var screenW = math.min(tmp.height, tmp.width);
+    var screenH = (math.max(tmp.height, tmp.width)) / widget.aspectRatio;
+    var screenW = (math.min(tmp.height, tmp.width)) / widget.aspectRatio;
     tmp = controller.value.previewSize;
     var previewH = math.max(tmp.height, tmp.width);
     var previewW = math.min(tmp.height, tmp.width);
     var screenRatio = screenH / screenW;
     var previewRatio = previewH / previewW;
 
-    return OverflowBox(
-      maxHeight:
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      height:
           screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
-      maxWidth:
+      width:
           screenRatio > previewRatio ? screenH / previewH * previewW : screenW,
-      child: CameraPreview(controller),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: CameraPreview(controller),
+      ),
     );
   }
 }
