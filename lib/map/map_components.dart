@@ -105,9 +105,9 @@ class NavigationTile extends StatelessWidget {
                     shape: MaterialStateProperty.all<CircleBorder>(
                       CircleBorder(),
                     ),
-                    fixedSize: MaterialStateProperty.all(
-                      Size(50.0, 50.0),
-                    ),
+                    // fixedSize: MaterialStateProperty.all(
+                    //   Size(50.0, 50.0),
+                    // ),
                   ),
                   onPressed: onPressed,
                   child: Icon(
@@ -143,9 +143,9 @@ class SmallButton extends StatelessWidget {
           shape: MaterialStateProperty.all<CircleBorder>(
             CircleBorder(),
           ),
-          fixedSize: MaterialStateProperty.all(
-            Size(size, size),
-          ),
+          // fixedSize: MaterialStateProperty.all(
+          //   Size(size, size),
+          // ),
         ),
         onPressed: onPressed,
         child: icon,

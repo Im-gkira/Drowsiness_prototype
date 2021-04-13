@@ -35,7 +35,7 @@ dependencies:
   google_fonts: ^2.0.0
   google_maps_flutter: ^2.0.2
   provider: ^5.0.0
-
+  collapsible_sidebar: ^1.0.7+2
 
 dev_dependencies:
   flutter_test:

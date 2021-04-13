@@ -121,9 +121,9 @@ class SearchBox extends StatelessWidget {
               shape: MaterialStateProperty.all<CircleBorder>(
                 CircleBorder(),
               ),
-              fixedSize: MaterialStateProperty.all(
-                Size(50, 50),
-              ),
+              // fixedSize: MaterialStateProperty.all(
+              //   Size(50, 50),
+              // ),
               elevation: MaterialStateProperty.all<double>(0.0),
             ),
             onPressed: onPressed,
