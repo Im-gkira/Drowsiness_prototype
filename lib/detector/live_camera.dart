@@ -51,6 +51,7 @@ class _LiveFeedState extends State<LiveFeed> {
   Widget build(BuildContext context) {
     // Size screen = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
           CameraFeed(widget.cameras, setRecognitions, 1.0),

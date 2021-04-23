@@ -267,6 +267,8 @@ class _GMapState extends State<GMap> {
                 polylineId: PolylineId('routes'),
                 points: _points,
                 color: Colors.blue,
+                endCap: Cap.roundCap,
+                startCap: Cap.roundCap,
               )
             },
             onLongPress: (position) {
@@ -301,10 +303,10 @@ class _GMapState extends State<GMap> {
                       }
                     },
                     Icon(
-                      Icons.directions,
+                      Icons.directions_outlined,
                       size: 35.0,
                     ),
-                    Colors.lightBlueAccent,
+                    Colors.blue,
                     50.0,
                   ),
                   SizedBox(
@@ -328,7 +330,7 @@ class _GMapState extends State<GMap> {
                       _controller
                           .animateCamera(CameraUpdate.newLatLng(_destination));
                     }
-                  }, Icon(Icons.search), Colors.black, 50.0),
+                  }, Icon(Icons.search_outlined), Colors.blue, 50.0),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -338,7 +340,7 @@ class _GMapState extends State<GMap> {
                       getLocation();
                     },
                     Icon(
-                      Icons.location_on,
+                      Icons.navigation_outlined,
                       size: 35.0,
                     ),
                     Colors.blue,
@@ -356,13 +358,13 @@ class _GMapState extends State<GMap> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Provider.of<CameraData>(context, listen: true).icon),
-        backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Provider.of<CameraData>(context, listen: true).icon),
+      //   backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
+      //   onPressed: () {
+      //     Navigator.pop(context);
+      //   },
+      // ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dds/map/map_components.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,10 +50,27 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Container(
         child: ListView(
           children: [
+            SizedBox(
+              height: 20,
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: SmallButton(
+                () {
+                  Navigator.pop(context);
+                },
+                Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+                Colors.white,
+                50.0,
+              ),
+            ),
+            Current(),
             SearchBox(
               () async {
                 FocusScopeNode currentFocus = FocusScope.of(context);
@@ -63,11 +81,58 @@ class _SearchScreenState extends State<SearchScreen> {
                 setState(() {});
               },
             ),
+            SizedBox(
+              height: 20.0,
+            ),
             Column(
               children: searchEntries,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Current extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      height: 60.0,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: 5.0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue, width: 5.0),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            height: 30.0,
+            width: 30.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: 50.0,
+            padding: EdgeInsets.only(
+                top: 10.0, bottom: 15.0, left: 10.0, right: 10.0),
+            margin: EdgeInsets.only(left: 10.0, right: 5.0),
+            child: Text(
+              'Current Location',
+              style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -80,31 +145,40 @@ class SearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.indigo,
-        borderRadius: BorderRadius.circular(30.0),
-      ),
       height: 60.0,
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
+            margin: EdgeInsets.only(left: 5.0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue, width: 5.0),
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            height: 30.0,
+            width: 30.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             width: MediaQuery.of(context).size.width * 0.6,
             height: 50.0,
-            padding: EdgeInsets.only(bottom: 5.0, left: 10.0, right: 10.0),
-            margin: EdgeInsets.only(left: 20.0, right: 20.0),
-            color: Colors.indigo,
+            padding: EdgeInsets.only(
+                top: 10.0, bottom: 15.0, left: 10.0, right: 10.0),
+            margin: EdgeInsets.only(left: 5.0, right: 5.0),
             child: TextField(
               style: GoogleFonts.ubuntu(
                 textStyle: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.white,
+                  fontSize: 20.0,
+                  color: Colors.black,
                 ),
               ),
               autofocus: false,
-              cursorHeight: 40.0,
-              cursorColor: Colors.pink,
+              cursorHeight: 25.0,
+              cursorColor: Colors.black,
               decoration: InputDecoration(
                 border: InputBorder.none,
               ),
@@ -116,14 +190,15 @@ class SearchBox extends StatelessWidget {
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
-                Colors.pink,
+                Colors.blue,
               ),
-              shape: MaterialStateProperty.all<CircleBorder>(
-                CircleBorder(),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
               ),
-              // fixedSize: MaterialStateProperty.all(
-              //   Size(50, 50),
-              // ),
+              fixedSize: MaterialStateProperty.all(
+                Size(50, 50),
+              ),
               elevation: MaterialStateProperty.all<double>(0.0),
             ),
             onPressed: onPressed,
@@ -159,30 +234,38 @@ class SearchWidget extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         margin: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.indigo,
+          color: Colors.grey.shade300,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StyledText(data['title'], 25),
+            StyledText(data['title'], 25, Colors.blue),
             SizedBox(
               height: 10.0,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.location_on,
-                  color: Colors.pink,
+                Container(
+                  height: 30.0,
+                  width: 30.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.blue),
+                  child: Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.white,
+                    size: 20.0,
+                  ),
                 ),
                 SizedBox(
                   width: 10.0,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.7,
-                  child: StyledText(data['address']['label'], 20),
+                  child: StyledText(data['address']['label'], 20, Colors.black),
                 ),
               ],
             ),
@@ -192,14 +275,22 @@ class SearchWidget extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.directions,
-                  color: Colors.pink,
+                Container(
+                  height: 30.0,
+                  width: 30.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.blue),
+                  child: Icon(
+                    Icons.directions_outlined,
+                    color: Colors.white,
+                    size: 20.0,
+                  ),
                 ),
                 SizedBox(
                   width: 10.0,
                 ),
-                StyledText(getDistance(), 20),
+                StyledText(getDistance(), 20, Colors.black),
               ],
             ),
             //StyledText(data['categories'][0]['name']),
@@ -213,7 +304,8 @@ class SearchWidget extends StatelessWidget {
 class StyledText extends StatelessWidget {
   final String text;
   final double height;
-  StyledText(this.text, this.height);
+  final Color colour;
+  StyledText(this.text, this.height, this.colour);
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -222,7 +314,7 @@ class StyledText extends StatelessWidget {
         textStyle: TextStyle(
           height: 1,
           fontSize: height,
-          color: Colors.white,
+          color: colour,
         ),
       ),
     );

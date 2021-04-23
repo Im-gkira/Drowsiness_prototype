@@ -12,112 +12,184 @@ class NavigationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
+    return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
       padding: EdgeInsets.symmetric(horizontal: 10.0),
-      height: MediaQuery.of(context).size.height * 0.25,
-      decoration: BoxDecoration(
-        color: Colors.indigo,
-        borderRadius: BorderRadius.circular(30.0),
-        border: Border.all(
-          width: 5.0,
-          color: Colors.indigoAccent,
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   color: Colors.lightBlueAccent,
+      //   borderRadius: BorderRadius.circular(30.0),
+      //   border: Border.all(
+      //     width: 5.0,
+      //     color: Colors.blue,
+      //   ),
+      // ),
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.bottomRight,
-      curve: Curves.easeIn,
-      duration: Duration(milliseconds: 100),
-      child: ListView(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // curve: Curves.easeIn,
+      // duration: Duration(milliseconds: 100),
+      child: Column(
         children: [
-          Row(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Text(
-                  '$_instructions',
-                  style: GoogleFonts.concertOne(
-                    textStyle: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
+          Container(
+            padding: EdgeInsets.only(bottom: 10.0, left: 10.0, right: 10.0),
+            height: MediaQuery.of(context).size.height * 0.23,
+            decoration: BoxDecoration(
+              color: Colors.blue.shade200,
+              borderRadius: BorderRadius.circular(25.0),
+              border: Border.all(
+                width: 5.0,
+                color: Colors.blue,
+              ),
+            ),
+            child: ListView(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: Colors.lightBlue,
+                        border: Border.all(
+                          width: 5.0,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      //margin: EdgeInsets.all(2.5),
+                      width: MediaQuery.of(context).size.width * 0.36,
+                      height: 40.0,
+                      child: Center(
+                        child: Text(
+                          '$_action',
+                          style: GoogleFonts.concertOne(
+                            textStyle: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      //alignment: Alignment.topCenter,
+                      //width: MediaQuery.of(context).size.width * 0.2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: Colors.lightBlue,
+                        border: Border.all(
+                          width: 5.0,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      //margin: EdgeInsets.all(2.5),
+                      width: MediaQuery.of(context).size.width * 0.36,
+                      height: 40.0,
+                      child: Center(
+                        child: Text(
+                          '$_distance',
+                          style: GoogleFonts.concertOne(
+                            textStyle: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.lightBlue,
+                    border: Border.all(
+                      width: 5.0,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  height: 40.0,
+                  child: Center(
+                    child: Text(
+                      '$_instructions',
+                      style: GoogleFonts.concertOne(
+                        textStyle: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.topCenter,
-                width: MediaQuery.of(context).size.width * 0.2,
-                child: Text(
-                  '$_distance',
-                  style: GoogleFonts.concertOne(
-                    textStyle: TextStyle(
-                      fontSize: 25.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
+            height: 5.0,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.25,
-                child: Text(
-                  '$_action',
-                  style: GoogleFonts.concertOne(
-                    textStyle: TextStyle(
-                      fontSize: 25.0,
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25.0),
+                    color: Colors.lightBlue,
+                    border: Border.all(
+                      width: 5.0,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  height: 50.0,
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  width: MediaQuery.of(context).size.width * 0.65,
+                  child: Center(
+                    child: Text(
+                      '$_totalDistance',
+                      style: GoogleFonts.concertOne(
+                        textStyle: TextStyle(
+                          fontSize: 30.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  //padding: EdgeInsets.only(right: 5.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      //foregroundColor: MaterialStateProperty.all<Color>(colour),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.blue,
+                      ),
+                      shadowColor: MaterialStateProperty.all<Color>(
+                        Colors.red,
+                      ),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                        CircleBorder(),
+                      ),
+                      fixedSize: MaterialStateProperty.all(
+                        Size(50.0, 50.0),
+                      ),
+                    ),
+                    onPressed: onPressed,
+                    child: Icon(
+                      Icons.close,
+                      size: 35.0,
                       color: Colors.white,
                     ),
                   ),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: Text(
-                  '$_totalDistance',
-                  style: GoogleFonts.concertOne(
-                    textStyle: TextStyle(
-                      fontSize: 30.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(right: 10.0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    //foregroundColor: MaterialStateProperty.all<Color>(colour),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.pinkAccent,
-                    ),
-                    shadowColor: MaterialStateProperty.all<Color>(
-                      Colors.red,
-                    ),
-                    shape: MaterialStateProperty.all<CircleBorder>(
-                      CircleBorder(),
-                    ),
-                    // fixedSize: MaterialStateProperty.all(
-                    //   Size(50.0, 50.0),
-                    // ),
-                  ),
-                  onPressed: onPressed,
-                  child: Icon(
-                    Icons.close,
-                    size: 35.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -143,9 +215,9 @@ class SmallButton extends StatelessWidget {
           shape: MaterialStateProperty.all<CircleBorder>(
             CircleBorder(),
           ),
-          // fixedSize: MaterialStateProperty.all(
-          //   Size(size, size),
-          // ),
+          fixedSize: MaterialStateProperty.all(
+            Size(size, size),
+          ),
         ),
         onPressed: onPressed,
         child: icon,

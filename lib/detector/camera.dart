@@ -100,6 +100,14 @@ class _CameraFeedState extends State<CameraFeed> {
     var previewRatio = previewH / previewW;
 
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(
+          width: 5.0,
+          color: Colors.blue,
+        ),
+      ),
       margin: EdgeInsets.all(10.0),
       height:
           screenRatio > previewRatio ? screenH : screenW / previewW * previewH,
