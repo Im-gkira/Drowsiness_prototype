@@ -11,6 +11,7 @@ import 'package:dds/map/search.dart';
 import 'package:camera/camera.dart';
 import 'package:dds/detector/camera.dart';
 import 'package:tflite/tflite.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:dds/response.dart';
 
@@ -37,7 +38,7 @@ class _GMapState extends State<GMap> {
   StreamSubscription<Position> _positionStream;
   List<Widget> navigationList = [];
   var ratio;
-
+  String darkMapStyle;
   List<dynamic> _recognitions;
   int _imageHeight = 0;
   int _imageWidth = 0;
@@ -67,6 +68,12 @@ class _GMapState extends State<GMap> {
     getLocation();
     loadTfModel();
     super.initState();
+  }
+
+  Future getMapStyle() async {
+    darkMapStyle = await rootBundle.loadString('assets/dark.json');
+    print(darkMapStyle);
+    _controller.setMapStyle(darkMapStyle);
   }
 
   void getLocation() async {
@@ -256,6 +263,7 @@ class _GMapState extends State<GMap> {
             initialCameraPosition: CameraPosition(target: _center, zoom: 17.0),
             onMapCreated: (GoogleMapController controller) {
               _controller = controller;
+              getMapStyle();
             },
             mapType: MapType.normal,
             myLocationButtonEnabled: false,
@@ -305,8 +313,9 @@ class _GMapState extends State<GMap> {
                     Icon(
                       Icons.directions_outlined,
                       size: 35.0,
+                      color: Colors.blue,
                     ),
-                    Colors.blue,
+                    Colors.black,
                     50.0,
                   ),
                   SizedBox(
@@ -330,7 +339,13 @@ class _GMapState extends State<GMap> {
                       _controller
                           .animateCamera(CameraUpdate.newLatLng(_destination));
                     }
-                  }, Icon(Icons.search_outlined), Colors.blue, 50.0),
+                  },
+                      Icon(
+                        Icons.search_outlined,
+                        color: Colors.blue,
+                      ),
+                      Colors.black,
+                      50.0),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -342,8 +357,9 @@ class _GMapState extends State<GMap> {
                     Icon(
                       Icons.navigation_outlined,
                       size: 35.0,
+                      color: Colors.blue,
                     ),
-                    Colors.blue,
+                    Colors.black,
                     50.0,
                   ),
                 ],

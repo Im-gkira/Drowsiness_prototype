@@ -45,6 +45,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/dark.json
+    - assets/images/
     - assets/eyes_float.tflite
     - assets/labels.txt
