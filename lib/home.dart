@@ -1,3 +1,4 @@
+import 'package:dds/settings/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dds/detector/live_camera.dart';
@@ -5,6 +6,8 @@ import 'package:dds/map/map.dart';
 import 'package:dds/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
+// import 'dart:async';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LiveFeed(cameras),
+                    builder: (context) => LiveFeed(cameras, Colors.black),
                   ),
                 );
               },
@@ -58,9 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
               'Map',
             ),
             Button(
-              Icons.settings_outlined,
-              () {},
-              'Settings',
+              Icons.info_outline,
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Info(),
+                  ),
+                );
+              },
+              'Info',
             ),
           ],
         ),

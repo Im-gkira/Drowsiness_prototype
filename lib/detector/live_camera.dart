@@ -4,13 +4,17 @@ import 'package:dds/detector/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'package:provider/provider.dart';
 import 'package:dds/response.dart';
+import 'package:flutter/services.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
 // import 'package:dds/detector/bounding_box.dart';
 // import 'dart:math' as math;
 
 class LiveFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
-
-  LiveFeed(this.cameras);
+  final Color colour;
+  LiveFeed(this.cameras, this.colour);
 
   @override
   _LiveFeedState createState() => _LiveFeedState();
@@ -20,6 +24,44 @@ class _LiveFeedState extends State<LiveFeed> {
   List<dynamic> _recognitions;
   int _imageHeight = 0;
   int _imageWidth = 0;
+
+  final oneSecond = Duration(seconds: 1);
+  int counter;
+  Timer _timer;
+
+  void startTimer() {
+    final audioPlayer = AudioPlayer();
+    AudioCache player = AudioCache(fixedPlayer: audioPlayer);
+    counter = 3;
+    _timer = Timer.periodic(oneSecond, (timer) {
+      if (counter < 0) {
+        _timer.cancel();
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            player.play('alert.wav');
+            return Center(
+              child: Container(
+                height: 128.0,
+                width: 128.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/alert.png'),
+                  ),
+                ),
+              ),
+            );
+          },
+        ).then((val) {
+          print('Clearing Song');
+          audioPlayer.stop();
+          player.clearCache();
+          audioPlayer.dispose();
+        });
+      }
+      counter--;
+    });
+  }
 
   initCameras() async {}
 
@@ -44,6 +86,7 @@ class _LiveFeedState extends State<LiveFeed> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([]);
     loadTfModel();
   }
 
@@ -54,7 +97,7 @@ class _LiveFeedState extends State<LiveFeed> {
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          CameraFeed(widget.cameras, setRecognitions, 1.0),
+          CameraFeed(widget.cameras, setRecognitions, 1.0, widget.colour),
           // BoundingBox(
           //   _recognitions == null ? [23,23] : _recognitions,
           //   math.max(_imageHeight, _imageWidth),
@@ -65,10 +108,17 @@ class _LiveFeedState extends State<LiveFeed> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Provider.of<CameraData>(context, listen: true).icon),
-        backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
+        splashColor: Colors.transparent,
+        child: Text('Start'),
+        // child: Icon(Provider.of<CameraData>(context, listen: true).icon),
+        // backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
         onPressed: () {
-          Navigator.pop(context);
+          if (_timer == null) {
+            startTimer();
+          } else {
+            _timer.isActive ? _timer.cancel() : startTimer();
+          }
+          // Navigator.pop(context);
         },
       ),
     );

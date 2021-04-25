@@ -12,6 +12,8 @@ import 'package:camera/camera.dart';
 import 'package:dds/detector/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'package:flutter/services.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import 'package:dds/response.dart';
 
@@ -42,6 +44,45 @@ class _GMapState extends State<GMap> {
   List<dynamic> _recognitions;
   int _imageHeight = 0;
   int _imageWidth = 0;
+  // final audioPlayer = AudioPlayer();
+  // AudioCache player = AudioCache(fixedPlayer: audioPlayer);
+  final oneSecond = Duration(seconds: 1);
+  int counter;
+  Timer _timer;
+
+  void startTimer() {
+    final audioPlayer = AudioPlayer();
+    AudioCache player = AudioCache(fixedPlayer: audioPlayer);
+    counter = 3;
+    _timer = Timer.periodic(oneSecond, (timer) {
+      if (counter < 0) {
+        _timer.cancel();
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            player.play('alert.wav');
+            return Center(
+              child: Container(
+                height: 128.0,
+                width: 128.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/alert.png'),
+                  ),
+                ),
+              ),
+            );
+          },
+        ).then((val) {
+          print('Clearing Song');
+          audioPlayer.stop();
+          player.clearCache();
+          audioPlayer.dispose();
+        });
+      }
+      counter--;
+    });
+  }
 
   initCameras() async {}
 
@@ -67,6 +108,7 @@ class _GMapState extends State<GMap> {
   void initState() {
     getLocation();
     loadTfModel();
+    SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
   }
 
@@ -312,7 +354,7 @@ class _GMapState extends State<GMap> {
                     },
                     Icon(
                       Icons.directions_outlined,
-                      size: 35.0,
+                      size: 30.0,
                       color: Colors.blue,
                     ),
                     Colors.black,
@@ -349,14 +391,35 @@ class _GMapState extends State<GMap> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  SmallButton(
+                  NewButton(
                     () {
-                      markerList.clear();
+                      //markerList.clear();
                       getLocation();
+                      if (_timer == null) {
+                        startTimer();
+                      } else {
+                        _timer.isActive ? _timer.cancel() : startTimer();
+                      }
+                      //startTimer();
                     },
                     Icon(
                       Icons.navigation_outlined,
-                      size: 35.0,
+                      size: 30.0,
+                      color: Colors.blue,
+                    ),
+                    Colors.black,
+                    50.0,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  SmallButton(
+                    () {
+                      markerList.clear();
+                    },
+                    Icon(
+                      Icons.location_off_outlined,
+                      size: 30.0,
                       color: Colors.blue,
                     ),
                     Colors.black,
@@ -370,7 +433,8 @@ class _GMapState extends State<GMap> {
             ],
           ),
           Container(
-            child: CameraFeed(widget.cameras, setRecognitions, 3.0),
+            child:
+                CameraFeed(widget.cameras, setRecognitions, 3.0, Colors.blue),
           ),
         ],
       ),

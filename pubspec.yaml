@@ -35,7 +35,10 @@ dependencies:
   google_fonts: ^2.0.0
   google_maps_flutter: ^2.0.2
   provider: ^5.0.0
-  collapsible_sidebar: ^1.0.7+2
+  carousel_slider: ^2.3.1
+  dotted_border: ^1.0.7
+  url_launcher: ^6.0.3
+  audioplayers: ^0.18.3
 
 dev_dependencies:
   flutter_test:
@@ -45,7 +48,13 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/alert.wav
     - assets/dark.json
     - assets/images/
     - assets/eyes_float.tflite
     - assets/labels.txt
+
+  fonts:
+    - family: Cubano
+      fonts:
+        - asset: assets/fonts/Cubano.ttf

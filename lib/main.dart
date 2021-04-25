@@ -10,6 +10,7 @@ Future<void> main() async {
   // initialize the cameras when the app starts
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
+
   // running the app
   runApp(
     ChangeNotifierProvider<CameraData>(

@@ -12,10 +12,11 @@ class CameraFeed extends StatefulWidget {
   final List<CameraDescription> cameras;
   final Callback setRecognitions;
   final double aspectRatio;
+  final Color colour;
 
   // The cameraFeed Class takes the cameras list and the setRecognitions
   // function as argument
-  CameraFeed(this.cameras, this.setRecognitions, this.aspectRatio);
+  CameraFeed(this.cameras, this.setRecognitions, this.aspectRatio, this.colour);
 
   @override
   _CameraFeedState createState() => new _CameraFeedState();
@@ -105,7 +106,7 @@ class _CameraFeedState extends State<CameraFeed> {
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(
           width: 5.0,
-          color: Colors.blue,
+          color: widget.colour,
         ),
       ),
       margin: EdgeInsets.all(10.0),

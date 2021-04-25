@@ -213,6 +213,43 @@ class SmallButton extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
           //foregroundColor: MaterialStateProperty.all<Color>(colour),
+          //splashFactory: NoSplash.splashFactory,
+          backgroundColor: MaterialStateProperty.all<Color>(colour),
+          shadowColor: MaterialStateProperty.all<Color>(colour),
+          shape: MaterialStateProperty.all<CircleBorder>(
+            CircleBorder(),
+          ),
+          fixedSize: MaterialStateProperty.all(
+            Size(size, size),
+          ),
+          side: MaterialStateProperty.all<BorderSide>(
+            BorderSide(
+              color: Colors.blue,
+              width: 3.0,
+            ),
+          ),
+        ),
+        onPressed: onPressed,
+        child: icon,
+      ),
+    );
+  }
+}
+
+class NewButton extends StatelessWidget {
+  NewButton(this.onPressed, this.icon, this.colour, this.size);
+  final Function onPressed;
+  final Icon icon;
+  final Color colour;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          //foregroundColor: MaterialStateProperty.all<Color>(colour),
+          splashFactory: NoSplash.splashFactory,
           backgroundColor: MaterialStateProperty.all<Color>(colour),
           shadowColor: MaterialStateProperty.all<Color>(colour),
           shape: MaterialStateProperty.all<CircleBorder>(
