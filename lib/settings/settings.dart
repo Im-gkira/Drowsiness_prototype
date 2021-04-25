@@ -6,6 +6,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/services.dart';
 
+int limit = 2;
+
 class Info extends StatefulWidget {
   @override
   _InfoState createState() => _InfoState();
@@ -281,7 +283,9 @@ class _InstructionsWidgetState extends State<InstructionsWidget> {
                 displayList.add(
                   TextField(
                     onChanged: (value) {
-                      print(value);
+                      if (value != null && value != '') {
+                        limit = int.parse(value);
+                      }
                     },
                     style: GoogleFonts.roboto(
                       textStyle: TextStyle(

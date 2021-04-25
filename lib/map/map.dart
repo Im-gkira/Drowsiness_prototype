@@ -14,6 +14,7 @@ import 'package:tflite/tflite.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dds/settings/settings.dart';
 import 'package:provider/provider.dart';
 import 'package:dds/response.dart';
 
@@ -47,13 +48,13 @@ class _GMapState extends State<GMap> {
   // final audioPlayer = AudioPlayer();
   // AudioCache player = AudioCache(fixedPlayer: audioPlayer);
   final oneSecond = Duration(seconds: 1);
-  int counter;
+  int counter = limit;
   Timer _timer;
 
   void startTimer() {
     final audioPlayer = AudioPlayer();
     AudioCache player = AudioCache(fixedPlayer: audioPlayer);
-    counter = 3;
+    //counter = 3;
     _timer = Timer.periodic(oneSecond, (timer) {
       if (counter < 0) {
         _timer.cancel();

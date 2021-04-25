@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:async';
+import 'package:dds/settings/settings.dart';
 // import 'package:dds/detector/bounding_box.dart';
 // import 'dart:math' as math;
 
@@ -26,13 +27,13 @@ class _LiveFeedState extends State<LiveFeed> {
   int _imageWidth = 0;
 
   final oneSecond = Duration(seconds: 1);
-  int counter;
+  int counter = limit;
   Timer _timer;
 
   void startTimer() {
     final audioPlayer = AudioPlayer();
     AudioCache player = AudioCache(fixedPlayer: audioPlayer);
-    counter = 3;
+    //counter = 3;
     _timer = Timer.periodic(oneSecond, (timer) {
       if (counter < 0) {
         _timer.cancel();
@@ -97,7 +98,21 @@ class _LiveFeedState extends State<LiveFeed> {
       backgroundColor: Colors.black,
       body: Stack(
         children: <Widget>[
-          CameraFeed(widget.cameras, setRecognitions, 1.0, widget.colour),
+          GestureDetector(
+            child: CameraFeed(
+              widget.cameras,
+              setRecognitions,
+              1.0,
+              widget.colour,
+            ),
+            onTap: () {
+              if (_timer == null) {
+                startTimer();
+              } else {
+                _timer.isActive ? _timer.cancel() : startTimer();
+              }
+            },
+          ),
           // BoundingBox(
           //   _recognitions == null ? [23,23] : _recognitions,
           //   math.max(_imageHeight, _imageWidth),
@@ -107,20 +122,13 @@ class _LiveFeedState extends State<LiveFeed> {
           // ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        splashColor: Colors.transparent,
-        child: Text('Start'),
-        // child: Icon(Provider.of<CameraData>(context, listen: true).icon),
-        // backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
-        onPressed: () {
-          if (_timer == null) {
-            startTimer();
-          } else {
-            _timer.isActive ? _timer.cancel() : startTimer();
-          }
-          // Navigator.pop(context);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Provider.of<CameraData>(context, listen: true).icon),
+      //   backgroundColor: Provider.of<CameraData>(context, listen: true).colour,
+      //   onPressed: () {
+      //     Navigator.pop(context);
+      //   },
+      // ),
     );
   }
 }
