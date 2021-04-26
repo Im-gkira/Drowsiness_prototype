@@ -7,11 +7,9 @@ import 'package:dds/response.dart';
 List<CameraDescription> cameras;
 
 Future<void> main() async {
-  // initialize the cameras when the app starts
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
 
-  // running the app
   runApp(
     ChangeNotifierProvider<CameraData>(
       create: (context) {
@@ -20,7 +18,6 @@ Future<void> main() async {
       child: MaterialApp(
         home: HomeScreen(),
         debugShowCheckedModeBanner: false,
-        // theme: ThemeData.dark(),
       ),
     ),
   );
