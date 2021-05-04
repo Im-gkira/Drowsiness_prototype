@@ -6,7 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/services.dart';
 
-int limit = 2;
+int limit = 1000000000;
 
 class Info extends StatefulWidget {
   @override

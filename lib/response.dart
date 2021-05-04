@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CameraData extends ChangeNotifier {
   String cameraResponse = 'opened';
-  IconData icon = Icons.check;
+  IconData icon = Icons.check_circle;
   Color colour = Colors.green;
 
   void changeString(String newString) {
